@@ -11,8 +11,6 @@ fetch(Movies_url)
     })
 console.log(Movies)
 
-console.log("work")
-
 function Movie_view_function(){
     for (let i = 0; i < Movies.length; i++) {
 
@@ -70,10 +68,7 @@ function Edit(event) {
         TembArray.Quantity = quantity
         TembArray.Price = price
       
-        let movieId=TembArray.id
-
-
-        fetch(`${Movies_UpdateUrl}/${movieId}`,{
+        fetch(`${Movies_UpdateUrl}/${TembArray.id}`,{
             method:'PUT',
             headers:{
                 'content-type':'application/json'
@@ -81,7 +76,6 @@ function Edit(event) {
             body:JSON.stringify(TembArray)
         })
         alert(`${TembArray.Name} Movies Edited SuccesFully`)
-
 
         document.querySelector('.pop-cover').style.display = "none"
         window.location.reload()
@@ -94,10 +88,7 @@ function Delete(event) {
     let TembArray=Movies[btnValue]
     fetch(`${Movies_UpdateUrl}/${TembArray.id}`,{
         method:'DELETE',
-        headers:{
-            'content-type':'application/json'
-        },
-    })
+        })
     event.target.parentNode.parentNode.remove();
     // window.location.reload()
 }

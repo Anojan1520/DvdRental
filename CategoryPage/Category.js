@@ -10,13 +10,13 @@ if (UserId) {
     CategoryLink.href = `../CategoryPage/Category.html?loginId=${UserId}`
 }
 
-
 const movies = [];
 let RentedItems = []
 const Notify = [];
 const User = [];
 const LoginUsers = []
 
+let commonurl = "";
 let Movie_Url = "http://localhost:3000/Movies";
 let Rented_Url = "http://localhost:3000/RentedItems";
 let Notify_Url = "http://localhost:3000/Notification";
@@ -34,16 +34,14 @@ async function fetchData() {
             movies.push(...array);
             Movie_View();
             nav_func();
-
         })
+
     await fetch(Rented_Url)
         .then(response => response.json())
         .then(array => {
             RentedItems.push(...array)
             CartcountBasket()
-
         })
-
 
     await fetch(Notify_Url)
         .then(response => response.json())
@@ -56,18 +54,13 @@ async function fetchData() {
         .then(array => {
             User.push(...array)
         })
+
     await fetch(LoginUser_Url)
         .then(response => response.json())
         .then(array => {
             LoginUsers.push(...array)
         })
-
-
 }
-
-
-
-
 
 
 function CartcountBasket() {
@@ -77,14 +70,11 @@ function CartcountBasket() {
         if (element.Status == "Pending") {
             Count++
         }
-
     }
     document.getElementById("rentCount").textContent = Count
 }
 
-
 async function logout() {
-
     let User_details = User.find(x => x.id == UserId)
     let Temb_User = LoginUsers.find(x => x.username == User_details.username)
 
@@ -112,10 +102,7 @@ async function nav_func() {
         for (let r = 0; r < rentBtn.length; r++) {
             const element = rentBtn[r];
             element.style.display = "block"
-
         }
-
-
     }
     else {
         document.getElementById("login").style.display = "block"
@@ -172,23 +159,18 @@ function Movie_View() {
         if (movies[i].Quantity > 0) {
             var div = document.createElement('div')
             div.className = "movie-card"
-            div.innerHTML = ` 
-            <img src="${movies[i].Images}" alt="">
-                            <figcaption>${movies[i].Name}</figcaption>
-                            <h4 class="act">${movies[i].Actor}</h4>
-                            <h4 class="gen">${movies[i].Genere}</h4>
+            div.innerHTML = `<img src="${commonurl}${movies[i].images[0]}" alt="movie">
+                            <figcaption>${movies[i].name}</figcaption>
+                            <h4 class="act">${movies[i].actor}</h4>
+                            <h4 class="gen">${movies[i].genere}</h4>
                             <div>
                                  <h4 class="price">Price:</h4>
-                                 <p>${movies[i].Price}Rs</p>
+                                 <p>${movies[i].price}Rs</p>
                             </div>
-                            
-                            <button value="${movies[i].id}" onclick="rentPopup(event)" class="rent-btnLog">Rent Now</button>
-                           `
+                            <button value="${movies[i].id}" onclick="rentPopup(event)" class="rent-btnLog">Rent Now</button> `
             let movieDiv = document.querySelector('.all-movie-card')
             movieDiv.appendChild(div)
         }
-
-
     }
 
     loginCheck()
