@@ -1,8 +1,9 @@
 const CusOrders = [];
 const Movies = [];
 
-const movie_url = "http://localhost:3000/Movies";
-const confrim_url = "http://localhost:3000/RentedItems";
+const movie_url = "http://localhost:5228/api/Movie/get_All-Movies";
+const confrim_url = "http://localhost:5228/api/RentedItems/RentedItem";
+
 
 
 
@@ -41,17 +42,17 @@ function OrderItemView() {
     for (let i = 0; i < CusOrders.length; i++) {
         const element = CusOrders[i];
 
-        if (element.Status=='Accepted') {
+        if (element.status=='Accepted') {
             const movie=Movies.find(x=>x.id==element.movieId)
             console.log(movie)
             let tr = document.createElement('tr')
             tr.className = "tr"
-            tr.innerHTML = ` <td>${element.UserId}</td>
+            tr.innerHTML = ` <td>${element.userId}</td>
                         <td>${element.id}</td>
-                        <td>${movie.Name}</td>
-                        <td>${element.RentQuantity}</td>
-                        <td>${element.RentDate}</td>
-                        <td>${element.ReturnDate}</td>
+                        <td>${movie.name}</td>
+                        <td>${element.rentQuantity}</td>
+                        <td>${element.rentedDate}</td>
+                        <td>${element.returnDate}</td>
                         <td><button class="Delete-btn btn" value="${element.id}" onclick="ReturnDvd(event)">🔄</button></td>`
             document.getElementById('Movie-table').appendChild(tr)
         }
@@ -81,18 +82,20 @@ async function ReturnDvd(event) {
             },
             body: JSON.stringify(movie)
         })
-        await fetch(`${confrim_url}/${Id}`, {
-            method: 'DELETE',
-            headers: {
-                'content-type': 'application/json'
-            }
-        })
+       
     }
-
+    await fetch(`${confrim_url}/?id=${Id}`, {
+        method: 'DELETE',
+        headers: {
+            'content-type': 'application/json'
+        }
+    })
 
 
 
     alert('Return Sucessfully..........')
 
-    window.location.reload()
+    setTimeout(() => {
+        window.location.reload()
+    }, 900);
 }

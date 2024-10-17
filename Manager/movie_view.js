@@ -1,4 +1,4 @@
-let Movies_url = "http://localhost:3000/Movies"
+let Movies_url = "http://localhost:5228/api/Movie/get_All-Movies"
 let Movies_UpdateUrl = "http://localhost:3000/Movies"
 
 const Movies = [];
@@ -18,16 +18,16 @@ function Movie_view_function(){
         let tr = document.createElement('tr')
         tr.className = "tr"
         tr.innerHTML = `  
-                    <td>${movies.Name}</td>
-                    <td>${movies.Genere}</td>
-                    <td>${movies.Director}</td>
-                    <td>${movies.Actor}</td>
-                    <td>${movies.Release}</td>
-                    <td>${movies.Quantity}</td>
-                    <td>${movies.Price}</td>
+                    <td>${movies.name}</td>
+                    <td>${movies.genere}</td>
+                    <td>${movies.director}</td>
+                    <td>${movies.actor}</td>
+                    <td>${movies.release}</td>
+                    <td>${movies.quantity}</td>
+                    <td>${movies.price}</td>
                     <td class="btn-flex">
-                        <Button class="Edit-btn btn" onclick="Edit(event)" value="${i}">🖊️</Button><Button class="Delete-btn btn"
-                            onclick="Delete(event)" value="${i}">❎  </Button>
+                        <Button class="Edit-btn btn" onclick="Edit(event)" value="${movies.id}">🖊️</Button><Button class="Delete-btn btn"
+                            onclick="Delete(event)" value="${movies.id}">❎  </Button>
                     </td>`
         document.getElementById('Movie-table').appendChild(tr)
     }

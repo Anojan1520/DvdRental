@@ -5,10 +5,11 @@ const Notify = []
 const Customer = []
 
 // const Status=Json.Parse(localStorage.getItem("status"))||[];
-Rented_Url = "http://localhost:3000/RentedItems";
-movie_Url = "http://localhost:3000/Movies";
-notification_Url = "http://localhost:3000/Notification";
-User_Url = "http://localhost:3000/Customers";
+Rented_Url = "http://localhost:5228/api/RentedItems/RentedItem";
+movie_Url = "http://localhost:5228/api/Movie/get_All-Movies";
+notification_Url = "http://localhost:5228/api/Notification/Notification";
+User_Url = "http://localhost:5228/api/Users/User";
+
 
 Promise.all([
   fetch(Rented_Url)
@@ -46,25 +47,25 @@ async function Order_view() {
     let movie = movies.find(x => x.id == Order.movieId)
     console.log(movie)
 
-    let UserName = Customer.find(x => x.id == Order.UserId);
+    let UserName = Customer.find(x => x.id == Order.userId);
     console.log('UserName:', UserName);
 
     console.log(UserName)
     let total = 0
     if (movie) {
-      total = Order.RentQuantity * movie.Price
+      total = Order.rentQuantity * movie.price
 
     }
-    if (UserName && Order.Status == "Request") {
+    if (UserName && Order.status == "Request") {
       let tr = document.createElement('tr')
       tr.className = "tr"
       tr.innerHTML = `
                  <td>${UserName.firstname}</td>  
                     <td>${Order.id}</td>
-                  <td>${movie.Name}</td>
-                  <td>${Order.RentQuantity}</td>
+                  <td>${movie.name}</td>
+                  <td>${Order.rentQuantity}</td>
                   <td>Rs${total}</td>
-                  <td>${Order.RentDate}</td>
+                  <td>${Order.rentedDate}</td>
                   <td class="btn-flex">
                       <Button class="Edit-btn btn" onclick="Accept(event)" value="${Order.id}">✅ </Button><Button class="Delete-btn btn"
                           onclick="Decline(event)" value="${Order.id}">❎</Button>
@@ -85,7 +86,7 @@ async function Accept(event) {
   let movie = movies.find(x => x.id == order.MovieId)
   let RentedId = order.RentedId
 
-  let Notification = Notify.find(x => x.RentedId === order.id)
+  let Notification = Notify.find(x => x.rentedId === order.id)
 
   let year = new Date().getFullYear()
   let month = new Date().getMonth() + 1
@@ -94,15 +95,16 @@ async function Accept(event) {
   let Ryear = year
   let Rmonth = month
   let RentDate = `${Ryear}/${Rmonth}/${Rdate}`
-  let array = { ...order, ReturnDate: RentDate, Status: 'Accepted' }
+  order.ReturnDate = RentDate
+  order.status = 'Accepted'
 
   if (Notification) {
-    Notification.Status = true
-    Notification.RequestDate = RentDate
-    await fetch(`${notification_Url}/${Notification.id}`, {
+    Notification.status = 'true'
+    Notification.requestDate = RentDate
+    await fetch(`${notification_Url}/?id=${Notification.id}`, {
       method: 'PUT',
       headers: {
-        'content-type': 'application/json'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(Notification)
     })
@@ -110,17 +112,18 @@ async function Accept(event) {
   } else {
     alert("Order member clear their history")
   }
-  fetch(`${Rented_Url}/${order.id}`, {
+  fetch(`${Rented_Url}/?id=${order.id}`, {
     method: 'PUT',
     headers: {
       'content-type': 'application/json'
     },
-    body: JSON.stringify(array)
+    body: JSON.stringify(order)
   })
 
 
-
-  window.location.reload()
+  setTimeout(() => {
+    window.location.reload()
+  }, 900);
 
 }
 
@@ -130,32 +133,34 @@ async function Decline(event) {
   let Order = RentedItems.find(ord => ord.id == Id)
   let MOVIE = movies.find(ord => ord.id == Order.movieId)
   let Notification = Notify.find(x => x.RentedId == Order.id)
-  MOVIE.Quantity += parseInt(Order.RentQuantity)
-  await fetch(`${movie_Url}/${MOVIE.id}`, {
-    method: 'PUT',
-    headers: {
-      'content-type': 'application/json'
-    },
-    body: JSON.stringify(MOVIE)
-  })
+  // MOVIE.Quantity += parseInt(Order.RentQuantity)
+  // await fetch(`${movie_Url}/${MOVIE.id}`, {
+  //   method: 'PUT',
+  //   headers: {
+  //     'content-type': 'application/json'
+  //   },
+  //   body: JSON.stringify(MOVIE)
+  // })
   if (Notification) {
     Notification.Status = "Rejected"
-    await fetch(`${notification_Url}/${Notification.id}`, {
+    await fetch(`${notification_Url}/?id=${Notification.id}`, {
       method: 'PUT',
       headers: {
-        'content-type': 'application/json'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(Notification)
     })
   } else {
     alert("Order member clear their history")
   }
-  await fetch(`${Rented_Url}/${Order.id}`,{
-    method:'DELETE',
-    headers:{
-        'content-type': 'application/json'
+  await fetch(`${Rented_Url}/?id=${Order.id}`, {
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json'
     }
   })
-  window.location.reload()
+  setTimeout(() => {
+    window.location.reload()
+  }, 900);
 
 }

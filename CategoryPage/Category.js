@@ -16,18 +16,26 @@ const Notify = [];
 const User = [];
 const LoginUsers = []
 
-let commonurl = "";
-let Movie_Url = "http://localhost:3000/Movies";
-let Rented_Url = "http://localhost:3000/RentedItems";
-let Notify_Url = "http://localhost:3000/Notification";
-let User_Url = "http://localhost:3000/Customers"
-let LoginUser_Url = "http://localhost:3000/Login_User"
+let commonurl = "http://localhost:5228/Resources/";
+let Movie_Url = "http://localhost:5228/api/Movie/get_All-Movies";
+let Rented_Url = "http://localhost:5228/api/RentedItems/RentedItem";
+let Notify_Url = "http://localhost:5228/api/Notification/Notification";
+let User_Url = "http://localhost:5228/api/Users/User"
+let LoginUser_Url = "http://localhost:5228/api/Login/User"
 
 document.addEventListener("DOMContentLoaded", function () {
     fetchData();
 });
 
 async function fetchData() {
+
+    await fetch(User_Url)
+        .then(response => response.json())
+        .then(array => {
+            User.push(...array)
+
+
+        })
     await fetch(Movie_Url)
         .then(response => response.json())
         .then(array => {
@@ -41,27 +49,28 @@ async function fetchData() {
         .then(array => {
             RentedItems.push(...array)
             CartcountBasket()
+            console.log("RentedItem" + RentedItems)
         })
 
     await fetch(Notify_Url)
         .then(response => response.json())
         .then(array => {
             Notify.push(...array);
+            console.log(Notify)
         })
 
-    await fetch(User_Url)
-        .then(response => response.json())
-        .then(array => {
-            User.push(...array)
-        })
 
-    await fetch(LoginUser_Url)
-        .then(response => response.json())
-        .then(array => {
-            LoginUsers.push(...array)
-        })
+
+    // await fetch(LoginUser_Url)
+    //     .then(response => response.json())
+    //     .then(array => {
+    //         LoginUsers.push(...array)
+    //         console.log("Login" + LoginUsers)
+    //     })
 }
+console.log(RentedItems)
 
+console.log(User)
 
 function CartcountBasket() {
     let Count = 0
@@ -77,11 +86,10 @@ function CartcountBasket() {
 async function logout() {
     let User_details = User.find(x => x.id == UserId)
     let Temb_User = LoginUsers.find(x => x.username == User_details.username)
-
-    await fetch(`${LoginUser_Url}/${Temb_User.id}`, {
+    await fetch(`${LoginUser_Url}/?id=${Temb_User.id}`, {
         method: 'DELETE',
         headers: {
-            'content-type': 'application/json'
+            'Content-Type': 'application/json'
         }
     })
     const url = new URL(window.location.href);
@@ -139,15 +147,17 @@ async function Profile() {
         TembArray.firstname = firstname
         TembArray.phone = phone
         TembArray.email = email
-        fetch(`${User_Url}/${UserId}`, {
+        fetch(`${User_Url}/?id=${UserId}`, {
             method: 'PUT',
             headers: {
-                'content-type': 'application/json'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(TembArray)
         })
         document.querySelector(".pop-cover").style.display = "none"
-        window.location.reload()
+        setTimeout(() => {
+            window.location.reload()
+        }, 900);
 
     })
 }
@@ -156,7 +166,7 @@ console.log(movies)
 
 function Movie_View() {
     for (let i = 0; i < movies.length; i++) {
-        if (movies[i].Quantity > 0) {
+        if (movies[i].quantity > 0) {
             var div = document.createElement('div')
             div.className = "movie-card"
             div.innerHTML = `<img src="${commonurl}${movies[i].images[0]}" alt="movie">
@@ -222,34 +232,34 @@ function OrderHistoryView() {
     for (let i = 0; i < Notify.length; i++) {
         const element = Notify[i];
 
-        if (element.UserId == UserId) {
+        if (element.userId == UserId) {
             let check = movies.find(mov => mov.id == element.movieId)
             let checkDate = "Order"
             let status = "Rejected"
-            if (element.Status == true) {
+            if (element.status == 'true') {
                 status = "Accepted"
                 checkDate = "Return Date"
 
-            } else if (element.Status == false) {
+            } else if (element.status == 'false') {
                 status = "Pending"
                 checkDate = "Request Date"
 
             }
-            let tot = parseInt(element.RentQuantity) * parseInt(check.Price)
+            let tot = parseInt(element.rentedQuantity) * parseInt(check.price)
             let div = document.createElement('div')
             div.className = "rented-card"
             div.innerHTML = `
                         <div class="rented-image">
-                            <img src="${check.Images}" alt="" id="image-rent">
+                            <img src="${commonurl}${check.images[0]}" alt="" id="image-rent">
                         </div>
                         <div class="rented-content ">
                             <div class="rent-inline">
                                 <P class="key">Name:</P>
-                                <P class="val">${check.Name}</P>
+                                <P class="val">${check.name}</P>
                             </div>
                             <div class="rent-inline">
                                 <P class="key">Price:</P>
-                                <P class="val">${check.Price}</P>
+                                <P class="val">${check.price}</P>
                                 <div class="rent-inline">
                                     <P class="key">Total:</P>
                                     <P class="val">${tot}</P>
@@ -257,7 +267,7 @@ function OrderHistoryView() {
                             </div>
                             <div class="rent-inline">
                                 <P class="key">Quantity:</P>
-                                <P class="val">${element.RentQuantity}</P>
+                                <P class="val">${element.rentedQuantity}</P>
                             </div>
                             <div class="rent-inline">
                                 <P class="key">Status:</P>
@@ -265,7 +275,7 @@ function OrderHistoryView() {
                             </div>
                               <div class="rent-inline">
                                 <P class="key">${checkDate}:</P>
-                                <P class="val">${element.RequestDate}</P>
+                                <P class="val">${element.requestDate}</P>
                             </div>
                             <div class="rent-btn">
                             <button value="${element.id}" onclick="NotifyDelete(event)">Clear</button>
@@ -376,13 +386,13 @@ function rentPopup(event) {
     let mov = movies.find(mov => mov.id == btnVal)
     let rentDetails = mov
     document.getElementById("no").innerHTML = `No:${btnVal}`
-    document.getElementById("movie-rent").src = rentDetails.Images
-    document.getElementById("movie-name").textContent = rentDetails.Name
-    document.getElementById("movie-genre").textContent = rentDetails.Genere
-    document.getElementById("rent-director").textContent = rentDetails.Director
-    document.getElementById("Rent-actor").textContent = rentDetails.Actor
-    document.getElementById("rent-relesedate").textContent = rentDetails.Release
-    document.getElementById("rent-Quantity").textContent = rentDetails.Quantity
+    document.getElementById("movie-rent").src = `${commonurl}${rentDetails.images[0]}  `
+    document.getElementById("movie-name").textContent = rentDetails.name
+    document.getElementById("movie-genre").textContent = rentDetails.genere
+    document.getElementById("rent-director").textContent = rentDetails.director
+    document.getElementById("Rent-actor").textContent = rentDetails.actor
+    document.getElementById("rent-relesedate").textContent = rentDetails.release
+    document.getElementById("rent-Quantity").textContent = rentDetails.quantity
     document.getElementById("AddCart").value = btnVal
 
 
@@ -399,11 +409,11 @@ async function CartRent(event) {
     let btnVal = event.target.value
     var data = RentedItems.findIndex(x => x.id == btnVal)
     RentedItems.splice(data, 1)
-    const res = await fetch(`${Rented_Url}/${btnVal}`, {
+    await fetch(`${Rented_Url}/?id=${btnVal}`, {
         method: 'DELETE',
-        // headers: {
-        //     'Content-Type': 'application/json'
-        // }
+        headers: {
+            'Content-Type': 'application/json'
+        }
     })
     // console.log(res);
     event.target.parentNode.parentNode.parentNode.remove()
@@ -418,14 +428,18 @@ async function AddCart(event) {
     let already = RentedItems.find(mov => mov.movieId == btn && mov.Status == "Pending")
     let check = movies.find(movie => movie.id == btn)
     if (already == null) {
-        let movieCheck = { movieId: check.id, UserId: UserId, Status: 'Pending' }
+        let movieCheck = { movieId: check.id, userId: UserId, status: 'Pending', rentQuantity: 1, rentedDate: '', returnDate: '' }
+        console.log(movieCheck)
+        console.log('Sending:', JSON.stringify(movieCheck));
+
         fetch(Rented_Url, {
             method: 'POST',
             headers: {
-                'content-type': 'application/json'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(movieCheck)
         })
+        alert("work")
         RentedItems.push(movieCheck)
         CartcountBasket()
         document.getElementById("rent-pop").style.display = "none"
@@ -482,26 +496,26 @@ async function Rmovieload() {
 function RentedItemLoad() {
     for (let i = 0; i < RentedItems.length; i++) {
         let Rentmovies = RentedItems[i];
-        if (Rentmovies.Status == 'Pending') {
+        if (Rentmovies.status == 'Pending') {
             let movie = movies.find(mov => mov.id == Rentmovies.movieId)
-            let movieQuant = movie.Quantity
+            let movieQuant = movie.quantity
             if (movie != null) {
                 let div = document.createElement('div')
                 div.className = "rented-card"
                 div.innerHTML = ` <div class="rented-image">
-                                <img src="${movie.Images}" alt="" id="image-rent">
+                                <img src="${commonurl}${movie.images[0]}" alt="" id="image-rent">
                             </div>
                             <div class="rented-content ">
                                 <div class="rent-inline">
                                     <P class="key">Name:</P>
-                                    <P class="val">${movie.Name}</P>
+                                    <P class="val">${movie.name}</P>
                                 </div>
                                 <div class="rent-inline">
                                     <P class="key">Price:</P>
-                                    <P class="val quant">${movie.Price}</P>
+                                    <P class="val quant">${movie.price}</P>
                                     <div class="rent-inline">
                                     <P class="key">Total:</P>
-                                    <P class="val tot">${movie.Price}</P>
+                                    <P class="val tot">${movie.price}</P>
                                      </div>
                                 </div>
                               
@@ -551,47 +565,59 @@ function CancelrentMoviePop() {
 }
 console.log("Fucajsdncjdn02" + RentedItems[0])
 async function COrders() {
-    alert("Order request Successfull")
     for (let i = 0; i < RentedItems.length; i++) {
 
         const element = RentedItems[i];
-        if (element.Status == "Pending") {
+          console.log(element)
+      
+        if (element.status.toUpperCase() == "PENDING") {
+            console.log('movieId:', element.id);
+            console.log('UserId:', UserId);
             let date = new Date().getDate()
             let year = new Date().getFullYear()
             let Month = new Date().getMonth() + 1
             let fulldate = `${year}/${Month}/${date}`
+           
             if (element) {
+                alert("inloop")
                 let quant = document.getElementById(element.movieId).value
+                alert(quant)
                 let movie = movies.find(mov => mov.id == element.movieId)
-                let Notification = { RentedId: element.id, RentQuantity: quant, movieId: element.movieId, UserId: UserId, RequestDate: fulldate, Status: false }
-                let Rent = RentedItems.find(x => x.id == element.id)
+                let Notification = { RentedId: element.id, rentedQuantity: quant, movieId: element.movieId, UserId: UserId, RequestDate: fulldate, Status: 'false' }
+                // let Rent = RentedItems.find(x => x.id === element.id)
+                // console.log("rented")
+                // console.log(Rent)
+                // console.log(Notification)    
+                // console.log('rent'+Rent) 
                 await fetch(Notify_Url, {
                     method: 'POST',
                     headers: {
-                        'content-type': 'application/json'
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(Notification)
                 })
-                let movieQuant = movie.Quantity - quant
-                movie.Quantity = movieQuant
-                await fetch(`${Movie_Url}/${movie.id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'content-type': 'application/json'
-                    },
-                    body: JSON.stringify(movie)
-                })
+                // let movieQuant = movie.Quantity - quant
+                // movie.Quantity = movieQuant
+                // await fetch(`${Movie_Url}/${movie.id}`, {
+                //     method: 'PUT',
+                //     headers: {
+                //         'content-type': 'application/json'
+                //     },
+                //     body: JSON.stringify(movie)
+                // })
 
-                let OrderReq = { ...Rent, RentQuantity: quant, RentDate: fulldate, Status: 'Request' }
+                element.RentQuantity = quant
+                element.RentedDate = fulldate
+                element.status = 'Request'
+                console.log(`${Rented_Url}/${element.id}`)
 
-                console.log("OrderRequest" + OrderReq)
-                await fetch(`${Rented_Url}/${Rent.id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(OrderReq)
-                });
+                    await fetch(`${Rented_Url}/?id=${element.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(element)
+                    });
 
                 // await fetch(`${Rented_Url}/${element.id}`, {
                 //     method: 'DELETE',
@@ -599,10 +625,14 @@ async function COrders() {
                 //         'content-type': 'application/json'
                 //     }
                 // })
+              
+
             }
         }
     }
-   window.location.reload();
+    setTimeout(() => {
+        window.location.reload();
+    }, 900);
 }
 function OrderHistory() {
     OrderHistoryView();
@@ -614,13 +644,15 @@ function OrderHistory() {
 
 async function NotifyDelete(event) {
     let btnVal = event.target.value
-    event.target.parentNode.parentNode.parentNode.remove()
-    fetch(`${Notify_Url}/${btnVal}`, {
-        method: 'DELETE',
+    fetch(`${Notify_Url}/?id=${btnVal}`, {  
+        method: 'DELETE',       
         headers: {
-            'content-type': 'application/json'
+            'Content-Type': 'application/json'
         },
     })
+    console.log(btnVal)
+    event.target.parentNode.parentNode.parentNode.remove()
+  
 }
 
 function CancelHistory() {
