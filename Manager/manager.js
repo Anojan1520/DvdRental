@@ -27,9 +27,9 @@ function Customer_View_Function() {
                         </td>`
             document.getElementById('customer-table').appendChild(tr)
         }
-
     }
 }
+
 function Edit(event) {
     document.querySelector(".pop-cover").style.display = "block"
     var btnValue = event.target.value

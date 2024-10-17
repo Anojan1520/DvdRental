@@ -10,19 +10,19 @@ async function viewReports() {
     .then(array => {
       users.push(...array)
     })
-  await fetch("http://localhost:3000/Customers")
+  await fetch("http://localhost:5228/api/Users/User")
     .then(response => response.json())
     .then(array => {
       customer.push(...array)
       user()
     })
-  await fetch("http://localhost:3000/Movies")
+  await fetch("http://localhost:5228/api/Movie/Movie")
     .then(response => response.json())
     .then(array => {
       movies.push(...array)
     })
 
-  await fetch("http://localhost:3000/ConfirmOrders")
+  await fetch("http://localhost:5228/api/ConfirmOrder/ConfirmOrder")
     .then(response => response.json())
     .then(array => {
       ConfirmOrders.push(...array)

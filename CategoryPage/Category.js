@@ -14,10 +14,10 @@ const movies = [];
 let RentedItems = []
 const Notify = [];
 const User = [];
-const LoginUsers = []
+const LoginUsers = [];
 
 let commonurl = "http://localhost:5228/Resources/";
-let Movie_Url = "http://localhost:5228/api/Movie/get_All-Movies";
+let Movie_Url = "http://localhost:5228/api/Movie/Movie";
 let Rented_Url = "http://localhost:5228/api/RentedItems/RentedItem";
 let Notify_Url = "http://localhost:5228/api/Notification/Notification";
 let User_Url = "http://localhost:5228/api/Users/User"
@@ -59,8 +59,6 @@ async function fetchData() {
             console.log(Notify)
         })
 
-
-
     // await fetch(LoginUser_Url)
     //     .then(response => response.json())
     //     .then(array => {
@@ -69,7 +67,6 @@ async function fetchData() {
     //     })
 }
 console.log(RentedItems)
-
 console.log(User)
 
 function CartcountBasket() {
@@ -158,10 +155,8 @@ async function Profile() {
         setTimeout(() => {
             window.location.reload()
         }, 900);
-
     })
 }
-
 console.log(movies)
 
 function Movie_View() {
@@ -188,10 +183,10 @@ function Movie_View() {
     const uniqueMovies = new Set();
 
     movies.forEach(movie => {
-        uniqueActors.add(movie.Actor);
+        uniqueActors.add(movie.actor);
     });
     movies.forEach(movie => {
-        uniqueMovies.add(movie.Genere);
+        uniqueMovies.add(movie.genere);
     });
 
     uniqueMovies.forEach(movie => {
@@ -205,10 +200,7 @@ function Movie_View() {
         Option.value = actor
         Option.textContent = actor
         document.getElementById('actor-select').appendChild(Option)
-
     })
-
-
 }
 
 function loginCheck() {
@@ -220,12 +212,10 @@ function loginCheck() {
             })
         })
     }
-
 }
 
 function cancelProfile() {
     document.querySelector(".pop-cover").style.display = "none"
-
 }
 
 function OrderHistoryView() {
@@ -233,7 +223,7 @@ function OrderHistoryView() {
         const element = Notify[i];
 
         if (element.userId == UserId) {
-            let check = movies.find(mov => mov.id == element.movieId)
+            let check = movies.find(mov => mov.id == element.movieId);
             let checkDate = "Order"
             let status = "Rejected"
             if (element.status == 'true') {
@@ -243,7 +233,6 @@ function OrderHistoryView() {
             } else if (element.status == 'false') {
                 status = "Pending"
                 checkDate = "Request Date"
-
             }
             let tot = parseInt(element.rentedQuantity) * parseInt(check.price)
             let div = document.createElement('div')
@@ -284,13 +273,10 @@ function OrderHistoryView() {
                         </div>`
             document.getElementById("notify-i").appendChild(div)
         }
-
-
     }
 }
 
 function Search() {
-
     var enterText = document.getElementById('search').value.toUpperCase()
     console.log(enterText)
     var all_movie = document.querySelector(".all-movie-card")
@@ -329,11 +315,7 @@ function select() {
                 data.style.display = "block"
             }
         }
-
-
     }
-
-
 }
 
 // function Dselect(){
@@ -352,8 +334,6 @@ function select() {
 //                 data.style.display = "block"
 //             }
 //         }
-
-
 //     }
 // }
 
@@ -374,11 +354,8 @@ function Aselect() {
                 data.style.display = "block"
             }
         }
-
     }
-
 }
-
 
 function rentPopup(event) {
     document.getElementById("rent-pop").style.display = "block"
@@ -394,13 +371,10 @@ function rentPopup(event) {
     document.getElementById("rent-relesedate").textContent = rentDetails.release
     document.getElementById("rent-Quantity").textContent = rentDetails.quantity
     document.getElementById("AddCart").value = btnVal
-
-
 }
 
 function CancelPop() {
     document.getElementById("rent-pop").style.display = "none"
-
 }
 
 async function CartRent(event) {
@@ -417,13 +391,10 @@ async function CartRent(event) {
     })
     // console.log(res);
     event.target.parentNode.parentNode.parentNode.remove()
-
     Calulate(event)
 }
 
-
 async function AddCart(event) {
-
     let btn = event.target.value
     let already = RentedItems.find(mov => mov.movieId == btn && mov.Status == "Pending")
     let check = movies.find(movie => movie.id == btn)
@@ -448,11 +419,9 @@ async function AddCart(event) {
     else {
         document.getElementById("rent-pop").style.display = "none"
         alert("This item already in the cart")
-
     }
-
-
 }
+
 function Calulate(event) {
     let quant = event.target.value
     let parent = event.target.parentNode.parentNode
@@ -460,8 +429,8 @@ function Calulate(event) {
     let total = price * quant
     parent.querySelector(".tot").textContent = total + ".00"
     totalPrice()
-
 }
+
 function totalPrice() {
     let parent = document.getElementById("all-cards")
     let array = parent.querySelectorAll(".tot")
@@ -470,16 +439,11 @@ function totalPrice() {
         let element = array[i].textContent;
         let changenum = parseInt(element)
         total = total + changenum
-
     }
 
     document.getElementById("priceQuant").textContent = total
     document.getElementById("movieTot").textContent = RentedItems.length
-
-
 }
-
-
 
 async function Rmovieload() {
     RentedItems = []
@@ -488,11 +452,9 @@ async function Rmovieload() {
         .then(array => {
             RentedItems.push(...array)
             RentedItemLoad()
-
         })
-
-
 }
+
 function RentedItemLoad() {
     for (let i = 0; i < RentedItems.length; i++) {
         let Rentmovies = RentedItems[i];
@@ -530,8 +492,8 @@ function RentedItemLoad() {
                 document.getElementById("all-cards").appendChild(div)
             }
         }
-
     }
+
     let parent = document.getElementById("all-cards")
     let array = parent.querySelectorAll(".tot")
     let total = 0
@@ -539,34 +501,29 @@ function RentedItemLoad() {
         let element = array[i].textContent;
         let changenum = parseInt(element)
         total = total + changenum
-
     }
 
     document.getElementById("priceQuant").textContent = total
     document.getElementById("movieTot").textContent = RentedItems.length
-
 }
-
-
 
 function rentMoviePop() {
     document.getElementById("rentedItem-pop").style.left = "0%"
     Rmovieload()
     document.getElementById("cart-id").style.display = "none"
     totalPrice()
-
 }
+
 function CancelrentMoviePop() {
     document.getElementById("rentedItem-pop").style.left = "200%"
     document.getElementById("cart-id").style.display = "block"
     window.location.reload()
-
-
 }
-console.log("Fucajsdncjdn02" + RentedItems[0])
+
+console.log("Fucajsdncjdn02" + RentedItems[0]);
+
 async function COrders() {
     for (let i = 0; i < RentedItems.length; i++) {
-
         const element = RentedItems[i];
           console.log(element)
       
@@ -586,7 +543,6 @@ async function COrders() {
                 let Notification = { RentedId: element.id, rentedQuantity: quant, movieId: element.movieId, UserId: UserId, RequestDate: fulldate, Status: 'false' }
                 // let Rent = RentedItems.find(x => x.id === element.id)
                 // console.log("rented")
-                // console.log(Rent)
                 // console.log(Notification)    
                 // console.log('rent'+Rent) 
                 await fetch(Notify_Url, {
@@ -596,15 +552,18 @@ async function COrders() {
                     },
                     body: JSON.stringify(Notification)
                 })
-                // let movieQuant = movie.Quantity - quant
-                // movie.Quantity = movieQuant
-                // await fetch(`${Movie_Url}/${movie.id}`, {
-                //     method: 'PUT',
-                //     headers: {
-                //         'content-type': 'application/json'
-                //     },
-                //     body: JSON.stringify(movie)
-                // })
+
+                ////////////////////////////////// to reduce the quantity of the movie
+                let movieQuant = movie.quantity - quant
+                movie.quantity = movieQuant;
+                console.log(movie);
+                await fetch(`${Movie_Url}/${movie.id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify(movie)
+                })
 
                 element.RentQuantity = quant
                 element.RentedDate = fulldate
@@ -625,8 +584,6 @@ async function COrders() {
                 //         'content-type': 'application/json'
                 //     }
                 // })
-              
-
             }
         }
     }
@@ -634,13 +591,12 @@ async function COrders() {
         window.location.reload();
     }, 900);
 }
+
 function OrderHistory() {
     OrderHistoryView();
     document.getElementById("rentNotification").style.display = "block"
     document.getElementById("rentNotification").style.top = "2%"
-
 }
-
 
 async function NotifyDelete(event) {
     let btnVal = event.target.value
@@ -652,8 +608,7 @@ async function NotifyDelete(event) {
     })
     console.log(btnVal)
     event.target.parentNode.parentNode.parentNode.remove()
-  
-}
+  }
 
 function CancelHistory() {
     document.getElementById("rentNotification").style.display = "none"

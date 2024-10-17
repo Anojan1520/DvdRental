@@ -6,7 +6,7 @@ const Customer = []
 
 // const Status=Json.Parse(localStorage.getItem("status"))||[];
 Rented_Url = "http://localhost:5228/api/RentedItems/RentedItem";
-movie_Url = "http://localhost:5228/api/Movie/get_All-Movies";
+movie_Url = "http://localhost:5228/api/Movie/Movie";
 notification_Url = "http://localhost:5228/api/Notification/Notification";
 User_Url = "http://localhost:5228/api/Users/User";
 
@@ -38,7 +38,6 @@ Promise.all([
 ]).then(() => {
   Order_view()
 })
-
 
 async function Order_view() {
   for (let i = 0; i < RentedItems.length; i++) {
@@ -72,12 +71,8 @@ async function Order_view() {
                   </td>`
       document.getElementById('Movie-table').appendChild(tr)
     }
-
-
   }
 }
-
-
 
 async function Accept(event) {
   let Id = event.target.value
@@ -85,7 +80,6 @@ async function Accept(event) {
   alert(order.id)
   let movie = movies.find(x => x.id == order.MovieId)
   let RentedId = order.RentedId
-
   let Notification = Notify.find(x => x.rentedId === order.id)
 
   let year = new Date().getFullYear()
@@ -120,27 +114,26 @@ async function Accept(event) {
     body: JSON.stringify(order)
   })
 
-
   setTimeout(() => {
     window.location.reload()
   }, 900);
-
 }
 
 async function Decline(event) {
-  let Id = event.target.value
+  let Id = event.target.value;
+  let Order = RentedItems.find(ord => ord.id == Id);
+  let MOVIE = movies.find(ord => ord.id == Order.movieId);
+  let Notification = Notify.find(x => x.RentedId == Order.id);
+  MOVIE.quantity += parseInt(Order.RentQuantity);
 
-  let Order = RentedItems.find(ord => ord.id == Id)
-  let MOVIE = movies.find(ord => ord.id == Order.movieId)
-  let Notification = Notify.find(x => x.RentedId == Order.id)
-  // MOVIE.Quantity += parseInt(Order.RentQuantity)
-  // await fetch(`${movie_Url}/${MOVIE.id}`, {
-  //   method: 'PUT',
-  //   headers: {
-  //     'content-type': 'application/json'
-  //   },
-  //   body: JSON.stringify(MOVIE)
-  // })
+  await fetch(`${movie_Url}/${MOVIE.id}`, {
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify(MOVIE)
+  })
+
   if (Notification) {
     Notification.Status = "Rejected"
     await fetch(`${notification_Url}/?id=${Notification.id}`, {
@@ -162,5 +155,4 @@ async function Decline(event) {
   setTimeout(() => {
     window.location.reload()
   }, 900);
-
 }

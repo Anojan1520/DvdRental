@@ -1,4 +1,4 @@
-let Movies_url="http://localhost:3000/Movies"
+let Movies_url="http://localhost:5228/api/Movie/Movie"
 
 const Movies = [];
 
@@ -29,7 +29,7 @@ document.getElementById('form').addEventListener('submit', async function (event
     }
 
     try {
-        const response = await fetch('http://localhost:5228/api/Movie/Movie',
+        const response = await fetch(Movies_url,
             {
                 method: 'POST',
                 body: formData,
@@ -51,7 +51,6 @@ document.getElementById('form').addEventListener('submit', async function (event
     }
 
 })
-
    
 
  

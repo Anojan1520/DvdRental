@@ -10,9 +10,11 @@
     background-position: center center;
 
 }
-body{
+
+body {
     overflow-x: hidden;
 }
+
 .Registration {
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     padding: 30px;
@@ -24,11 +26,12 @@ label {
     display: block;
     font-size: 20px;
     padding-top: 1rem;
-
 }
 
 select {
     font-size: 25px;
+    border-radius: 5px;
+    padding: 5px;
 }
 
 .Registration h1 {
@@ -38,11 +41,9 @@ select {
     text-align: center;
 }
 
-
 .form-devide {
     display: flex;
     justify-content: space-evenly;
-
 }
 
 .form-devide input {
@@ -52,6 +53,7 @@ select {
     margin-top: 5px;
     margin-bottom: 5px;
     outline: none;
+    border-radius: 8px;
 }
 
 input::placeholder {
@@ -62,7 +64,8 @@ input::placeholder {
     width: 100%;
     display: flex;
     justify-content: center;
-}
+   
+   }
 
 .Add {
     font-size: 1.5rem;
@@ -74,25 +77,27 @@ input::placeholder {
     width: 100%;
     border: none;
     cursor: pointer;
+    border-radius: 8px;
+}
 
+.otp input {
+    width: 4rem;
+    text-align: center;
+    font-size: 2rem
 }
-.otp input{
-  width:4rem;
-  text-align: center;
-  font-size: 2rem
-}
-.a-tag{
+
+.a-tag {
     margin-top: 5px;
 }
-p{
+
+p {
     text-align: center;
     color: rgb(0, 84, 105);
 }
 
-.pop-edit{
-
+.pop-edit {
     font-size: 2rem;
-    background-color:rgb(0, 80, 0);
+    background-color: rgb(0, 80, 0);
     color: white;
     margin-top: 1rem;
     padding: 0.5rem 1rem;
@@ -101,15 +106,17 @@ p{
     border-radius: 5px;
     cursor: pointer;
 }
-.red{
+
+.red {
     background-color: rgb(161, 0, 0);
 }
-.white{
+
+.white {
     background-color: white;
 }
 
-.popup{
-    
+.popup {
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -122,10 +129,12 @@ p{
     position: fixed;
     background-color: rgba(0, 0, 0, 0.70)
 }
-.pop-cover{
+
+.pop-cover {
     display: none;
 }
-.para{
+
+.para {
     color: red;
     margin-top: 1rem;
 }

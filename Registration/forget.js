@@ -1,4 +1,3 @@
-console.log("work")
 const Users = [];
 
 fetch("http://localhost:5228/api/Users/User")
