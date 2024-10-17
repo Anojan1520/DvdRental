@@ -5,7 +5,7 @@ const ConfirmOrders = [];
 
 viewReports()
 async function viewReports() {
-  await fetch("http://localhost:3000/Login_User")
+  await fetch("http://localhost:5228/api/Login/User")
     .then(response => response.json())
     .then(array => {
       users.push(...array)
@@ -22,7 +22,7 @@ async function viewReports() {
       movies.push(...array)
     })
 
-  await fetch("http://localhost:5228/api/ConfirmOrder/ConfirmOrder")
+  await fetch("http://localhost:5228/api/RentedItems/RentedItem")
     .then(response => response.json())
     .then(array => {
       ConfirmOrders.push(...array)

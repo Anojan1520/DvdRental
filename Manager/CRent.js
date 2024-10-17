@@ -61,8 +61,8 @@ async function ReturnDvd(event) {
     console.log(movie)
 
     alert(movie.Name)
-    movie.quantity = parseInt(Rmovie.RentQuantity) + parseInt(movie.Quantity)
-
+    movie.quantity = parseInt(Rmovie.rentQuantity) + parseInt(movie.quantity)
+    movie.images=[];
     if (movie) {
         await fetch(`${movie_url}/${movie.id}`, {
             method: 'PUT',

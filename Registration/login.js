@@ -17,15 +17,26 @@ document.getElementById('form').addEventListener('submit', function (event) {
     let username = document.getElementById('Username').value.trim()
     let password = document.getElementById('Password').value.trim()
 
-    let detail_check = Users.find(opt => opt.username == username && opt.password == password);
+    function simpleEncryptPassword(pass) {
+        const shift = 2; 
+        let encrypted = '';
+        for (let i = 0; i < pass.length; i++) {
+            const char = pass[i];
+            encrypted += String.fromCharCode(char.charCodeAt(0) + shift);
+        }
+    
+        return encrypted;
+    }
+    var ChechPass=simpleEncryptPassword(password)
+    let detail_check = Users.find(opt => opt.username == username && opt.password == ChechPass);
     if (detail_check != null) {
         if (detail_check.position == "user") {
-            let temb_login = { username: username, password: password }
+            let temb_login = { username: username, password: ChechPass }
 
             fetch(Login_Url, {
                 method: 'POST',
                 headers: {
-                    'content-type': 'application/json'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(temb_login)
             })

@@ -59,12 +59,12 @@ async function fetchData() {
             console.log(Notify)
         })
 
-    // await fetch(LoginUser_Url)
-    //     .then(response => response.json())
-    //     .then(array => {
-    //         LoginUsers.push(...array)
-    //         console.log("Login" + LoginUsers)
-    //     })
+    await fetch(LoginUser_Url)
+        .then(response => response.json())
+        .then(array => {
+            LoginUsers.push(...array)
+            console.log("Login" + LoginUsers)
+        })
 }
 console.log(RentedItems)
 console.log(User)
@@ -73,7 +73,7 @@ function CartcountBasket() {
     let Count = 0
     for (let i = 0; i < RentedItems.length; i++) {
         const element = RentedItems[i];
-        if (element.Status == "Pending") {
+        if (element.status == "Pending") {
             Count++
         }
     }
@@ -125,6 +125,7 @@ async function nav_func() {
 }
 
 async function Profile() {
+    
     document.querySelector(".pop-cover").style.display = "block"
     let Users = User.find(user => user.id == UserId)
     var TembArray = Users
@@ -152,9 +153,11 @@ async function Profile() {
             body: JSON.stringify(TembArray)
         })
         document.querySelector(".pop-cover").style.display = "none"
+       
         setTimeout(() => {
-            window.location.reload()
+             window.location.reload()
         }, 900);
+
     })
 }
 console.log(movies)
@@ -396,7 +399,7 @@ async function CartRent(event) {
 
 async function AddCart(event) {
     let btn = event.target.value
-    let already = RentedItems.find(mov => mov.movieId == btn && mov.Status == "Pending")
+    let already = RentedItems.find(mov => mov.movieId == btn && mov.status == "Pending")
     let check = movies.find(movie => movie.id == btn)
     if (already == null) {
         let movieCheck = { movieId: check.id, userId: UserId, status: 'Pending', rentQuantity: 1, rentedDate: '', returnDate: '' }
@@ -442,7 +445,12 @@ function totalPrice() {
     }
 
     document.getElementById("priceQuant").textContent = total
-    document.getElementById("movieTot").textContent = RentedItems.length
+    let totCount=0;
+    for (let i = 0; i < RentedItems.length; i++) {
+        
+        totCount++
+    }
+    document.getElementById("movieTot").textContent = totCount
 }
 
 async function Rmovieload() {
@@ -556,6 +564,7 @@ async function COrders() {
                 ////////////////////////////////// to reduce the quantity of the movie
                 let movieQuant = movie.quantity - quant
                 movie.quantity = movieQuant;
+                movie.images=[];
                 console.log(movie);
                 await fetch(`${Movie_Url}/${movie.id}`, {
                     method: 'PUT',

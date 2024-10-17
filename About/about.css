@@ -1,0 +1,108 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #000000;
+    color: #ffffff;
+    padding: 0rem 1rem;
+    text-align: center;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 1rem;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+nav ul li a:hover {
+    color: rgb(255, 0, 136);
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+}
+.about-us img{
+    max-height: 35rem;
+    min-width: 10rem;
+}
+.about-us{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+.about-us h2{
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    margin-top:0 ;
+    color: rgb(4, 101, 108);
+}
+.about-us p{
+    margin-top: 0;
+    font-size: 1.6rem;
+    width: 40rem;
+}
+.about-flex{
+    display: flex;
+}
+.about-con{
+    margin-left: 1rem;
+}
+.about-con p span{
+    font-weight: bold;
+}
+.about-con h1{
+    color: rgb(4, 101, 108);
+
+}
+.reviews{
+    margin-bottom: 13rem;
+}
+
+.reviews h2{
+   font-size: 2rem;
+}
+.review{
+    padding: 1rem;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    min-width:30rem;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+}
+.cus-review{
+    display: flex;
+    justify-content: center;
+}
+.review p{
+    max-width: 23rem;
+}
+.review img{
+    height: 5rem;
+    width: 5rem;
+    border-radius:20rem;
+}
+
+

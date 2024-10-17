@@ -3,14 +3,15 @@ const UserId = SearchId.get('loginId')
 let Customer_Url = "http://localhost:5228/api/Users/User"
 let Login_Url = "http://localhost:5228/api/Login/User"
 const AllUsers = [];
+const LoginUsers=[]
 
 const homeLink = document.getElementById('homeLink');
 if (UserId) {
-  homeLink.href = `../HomePage/Home.html?loginId=${UserId}`;
+    homeLink.href = `../HomePage/Home.html?loginId=${UserId}`;
 }
-const CategoryLink=document.getElementById("CategoryLink")
+const CategoryLink = document.getElementById("CategoryLink")
 if (UserId) {
-    CategoryLink.href=`../CategoryPage/Category.html?loginId=${UserId}`
+    CategoryLink.href = `../CategoryPage/Category.html?loginId=${UserId}`
 }
 
 
@@ -23,9 +24,14 @@ fetch(Customer_Url)
         nav_func();
 
     })
+ fetch(Login_Url)
+    .then(response => response.json())
+    .then(array => {
+        LoginUsers.push(...array)
+        console.log("Login" + LoginUsers)
+    })
 
- 
-    // let UserId=Temb_User.id
+// let UserId=Temb_User.id
 function nav_func() {
     if (UserId != null) {
         document.getElementById("login").style.display = "none"
@@ -71,7 +77,7 @@ function nav_func() {
 }
 
 function Profile() {
-    
+
     document.querySelector(".pop-cover").style.display = "block"
     let Users = AllUsers.find(user => user.id == UserId)
     var TembArray = Users
@@ -91,38 +97,41 @@ function Profile() {
         TembArray.firstname = firstname
         TembArray.phone = phone
         TembArray.email = email
-        fetch(`${Customer_Url}/?id=${UserId}`,{
-            method:'PUT',
-            headers:{
-                'content-type':'application/json'
+        fetch(`${Customer_Url}/?id=${UserId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
             },
-            body:JSON.stringify(TembArray)
+            body: JSON.stringify(TembArray)
         })
         document.querySelector(".pop-cover").style.display = "none"
+
+    setTimeout(() => {
         window.location.reload()
+    }, 900);
 
     })
 }
 
-function cancelProfile(){
+function cancelProfile() {
     document.querySelector(".pop-cover").style.display = "none"
 
 }
 
 function logout() {
 
-    let User_details=AllUsers.find(x=>x.id==UserId)
+    let User_details = AllUsers.find(x => x.id == UserId)
     console.log(User_details.username)
-    let Temb_User=Login_users.find(x=>x.username==User_details.username)
+    let Temb_User = LoginUsers.find(x => x.username == User_details.username)
     console.log(Temb_User)
-    fetch(`${Login_Url}/${Temb_User.id}`,{
-        method:'DELETE',
-        headers:{
-            'content-type':'application/json'
+    fetch(`${Login_Url}/?id=${Temb_User.id}`, {
+        method: 'DELETE',
+        headers: {
+            'content-type': 'application/json'
         }
     })
     const url = new URL(window.location.href);
-    url.searchParams.delete('loginId');  
+    url.searchParams.delete('loginId');
     window.history.replaceState({}, '', url);
     setTimeout(() => {
         window.location.reload()

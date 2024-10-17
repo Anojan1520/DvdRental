@@ -53,7 +53,7 @@ select {
     margin-top: 5px;
     margin-bottom: 5px;
     outline: none;
-    border-radius: 8px;
+    border-radius: 4px;
 }
 
 input::placeholder {

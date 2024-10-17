@@ -106,7 +106,7 @@ function Edit(event) {
 function Delete(event) {
     var btnValue = event.target.value
     let TembArray = Movies[btnValue]
-    fetch(`${Movies_UpdateUrl}/${TembArray.id}`, {
+    fetch(`${Movies_url}/${TembArray.id}`, {
         method: 'DELETE',
     })
     event.target.parentNode.parentNode.remove();
@@ -115,5 +115,4 @@ function Delete(event) {
 
 function CancelPopup() {
     document.querySelector('.pop-cover').style.display = "none"
-
 }

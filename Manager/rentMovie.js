@@ -124,8 +124,8 @@ async function Decline(event) {
   let Order = RentedItems.find(ord => ord.id == Id);
   let MOVIE = movies.find(ord => ord.id == Order.movieId);
   let Notification = Notify.find(x => x.RentedId == Order.id);
-  MOVIE.quantity += parseInt(Order.RentQuantity);
-
+  MOVIE.quantity += parseInt(Order.rentQuantity);
+  MOVIE.images = [];
   await fetch(`${movie_Url}/${MOVIE.id}`, {
     method: 'PUT',
     headers: {
