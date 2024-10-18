@@ -156,7 +156,7 @@ async function Profile() {
        
         setTimeout(() => {
              window.location.reload()
-        }, 900);
+        }, 800);
 
     })
 }
@@ -321,24 +321,6 @@ function select() {
     }
 }
 
-// function Dselect(){
-//     let director_data = document.getElementById("director-select").value.toUpperCase()
-//     var allMovie = document.querySelector(".all-movie-card")
-//     var Movies = allMovie.querySelectorAll(".movie-card")
-//     for (let i = 0; i < Movies.length; i++) {
-//         var data = Movies[i]
-//         var director = data.querySelector('.dir').textContent.toUpperCase()
-//         if (director_data == "AllDIRECTOR") {
-//             data.style.display = "block"
-//         } else {
-//             if (director_data != director) {
-//                 data.style.display = "none"
-//             } else {
-//                 data.style.display = "block"
-//             }
-//         }
-//     }
-// }
 
 function Aselect() {
     let actor_data = document.getElementById("actor-select").value.toUpperCase().trim()
@@ -413,7 +395,7 @@ async function AddCart(event) {
             },
             body: JSON.stringify(movieCheck)
         })
-        alert("work")
+        alert("movie added to cart")
         RentedItems.push(movieCheck)
         CartcountBasket()
         document.getElementById("rent-pop").style.display = "none"
@@ -544,9 +526,9 @@ async function COrders() {
             let fulldate = `${year}/${Month}/${date}`
            
             if (element) {
-                alert("inloop")
+                alert("Your order has been placed")
                 let quant = document.getElementById(element.movieId).value
-                alert(quant)
+                // alert(quant)
                 let movie = movies.find(mov => mov.id == element.movieId)
                 let Notification = { RentedId: element.id, rentedQuantity: quant, movieId: element.movieId, UserId: UserId, RequestDate: fulldate, Status: 'false' }
                 // let Rent = RentedItems.find(x => x.id === element.id)
@@ -598,7 +580,7 @@ async function COrders() {
     }
     setTimeout(() => {
         window.location.reload();
-    }, 900);
+    }, 800);
 }
 
 function OrderHistory() {

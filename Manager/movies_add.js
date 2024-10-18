@@ -44,7 +44,6 @@ document.getElementById('form').addEventListener('submit', async function (event
             alert('Failed to upload movie: ' + response.statusText);
         }
     }
-
     catch (error) {
         console.error('Error adding movie:', error);
         alert('An error occurred while uploading the movie.');
