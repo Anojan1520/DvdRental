@@ -19,10 +19,11 @@ document.getElementById("form").addEventListener('submit', function (event) {
     let pass = document.getElementById('password').value.trim()
     let repass = document.getElementById('Repassword').value.trim()
 
+    
     if (pass == repass) {
         let ChangePass = Users.find(user => user.username == CheckUsers.User)
         console.log(ChangePass)
-        ChangePass.password = pass
+        ChangePass.password =simpleEncryptPassword(pass)
         console.log(ChangePass)
         fetch(`http://localhost:5228/api/Users/User/?id=${ChangePass.id}`,{
             method:'PUT',
@@ -32,7 +33,7 @@ document.getElementById("form").addEventListener('submit', function (event) {
             body:JSON.stringify(ChangePass)
         })
        setTimeout(() => {
-        // window.location.href="./Signin.html"
+        window.location.href="./Signin.html"
        }, 900);
 
     }
@@ -41,3 +42,14 @@ document.getElementById("form").addEventListener('submit', function (event) {
     }
 
 })
+
+function simpleEncryptPassword(pass) {
+    const shift = 2; 
+    let encrypted = '';
+    for (let i = 0; i < pass.length; i++) {
+        const char = pass[i];
+        encrypted += String.fromCharCode(char.charCodeAt(0) + shift);
+    }
+
+    return encrypted;
+}
