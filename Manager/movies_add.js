@@ -37,6 +37,10 @@ document.getElementById('form').addEventListener('submit', async function (event
 
         if (response.ok) {
             alert('Movie uploaded successfully!');
+
+            setInterval(() => {
+                window.location.reload()
+            }, 900);
         }
         else if (response) {
             const data = await response.json();
